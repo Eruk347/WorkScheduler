@@ -42,6 +42,10 @@
             this.second3End = new System.Windows.Forms.DateTimePicker();
             this.teamList = new System.Windows.Forms.ListBox();
             this.createListButton = new System.Windows.Forms.Button();
+            this.finalList = new System.Windows.Forms.ListBox();
+            this.loadTeams = new System.Windows.Forms.Button();
+            this.numberOfShifts = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).BeginInit();
             this.SuspendLayout();
             // 
             // teamName
@@ -87,6 +91,7 @@
             this.main13Start.Name = "main13Start";
             this.main13Start.Size = new System.Drawing.Size(136, 20);
             this.main13Start.TabIndex = 5;
+            this.main13Start.Value = new System.DateTime(2016, 9, 9, 12, 15, 0, 0);
             // 
             // label1
             // 
@@ -111,6 +116,7 @@
             this.main13End.Name = "main13End";
             this.main13End.Size = new System.Drawing.Size(136, 20);
             this.main13End.TabIndex = 7;
+            this.main13End.Value = new System.DateTime(2016, 12, 2, 0, 0, 0, 0);
             this.main13End.ValueChanged += new System.EventHandler(this.main13End_ValueChanged);
             // 
             // label3
@@ -128,6 +134,7 @@
             this.second3Start.Name = "second3Start";
             this.second3Start.Size = new System.Drawing.Size(136, 20);
             this.second3Start.TabIndex = 9;
+            this.second3Start.Value = new System.DateTime(2017, 1, 2, 0, 0, 0, 0);
             this.second3Start.ValueChanged += new System.EventHandler(this.second3Start_ValueChanged);
             // 
             // label4
@@ -145,6 +152,7 @@
             this.second3End.Name = "second3End";
             this.second3End.Size = new System.Drawing.Size(136, 20);
             this.second3End.TabIndex = 11;
+            this.second3End.Value = new System.DateTime(2017, 1, 20, 0, 0, 0, 0);
             // 
             // teamList
             // 
@@ -165,11 +173,44 @@
             this.createListButton.UseVisualStyleBackColor = true;
             this.createListButton.Click += new System.EventHandler(this.createListButton_Click);
             // 
+            // finalList
+            // 
+            this.finalList.FormattingEnabled = true;
+            this.finalList.Location = new System.Drawing.Point(554, 150);
+            this.finalList.Name = "finalList";
+            this.finalList.Size = new System.Drawing.Size(120, 407);
+            this.finalList.TabIndex = 15;
+            // 
+            // loadTeams
+            // 
+            this.loadTeams.Location = new System.Drawing.Point(264, 121);
+            this.loadTeams.Name = "loadTeams";
+            this.loadTeams.Size = new System.Drawing.Size(75, 23);
+            this.loadTeams.TabIndex = 16;
+            this.loadTeams.Text = "Load Teams";
+            this.loadTeams.UseVisualStyleBackColor = true;
+            this.loadTeams.Click += new System.EventHandler(this.loadTeams_Click);
+            // 
+            // numberOfShifts
+            // 
+            this.numberOfShifts.Location = new System.Drawing.Point(472, 124);
+            this.numberOfShifts.Name = "numberOfShifts";
+            this.numberOfShifts.Size = new System.Drawing.Size(44, 20);
+            this.numberOfShifts.TabIndex = 17;
+            this.numberOfShifts.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 561);
+            this.Controls.Add(this.numberOfShifts);
+            this.Controls.Add(this.loadTeams);
+            this.Controls.Add(this.finalList);
             this.Controls.Add(this.createListButton);
             this.Controls.Add(this.teamList);
             this.Controls.Add(this.label4);
@@ -186,6 +227,7 @@
             this.Controls.Add(this.teamName);
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,6 +249,9 @@
         private System.Windows.Forms.DateTimePicker second3End;
         private System.Windows.Forms.ListBox teamList;
         private System.Windows.Forms.Button createListButton;
+        private System.Windows.Forms.ListBox finalList;
+        private System.Windows.Forms.Button loadTeams;
+        private System.Windows.Forms.NumericUpDown numberOfShifts;
     }
 }
 
