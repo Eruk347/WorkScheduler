@@ -12,8 +12,9 @@ namespace WorkScheduler
 {
     public partial class Form1 : Form
     {
-        List<DateTime> dates = new List<DateTime>();
+        List<String> dates = new List<String>();
         List<Team> teams = new List<Team>();
+        Random rnd = new Random(DateTime.Now.Millisecond);
         public void fillTeamList()
         {
             string[,] teamArray = new string[teams.Count, dates.Count];
@@ -34,7 +35,18 @@ namespace WorkScheduler
             {
                 if (select.DayOfWeek == DayOfWeek.Tuesday || select.DayOfWeek == DayOfWeek.Friday)
                 {
-                    dates.Add(select);
+                    string dateSelect = "";
+                    if (select.Day < 10)
+                        dateSelect += "0" + select.Day;
+                    else
+                        dateSelect += select.Day;
+                    dateSelect += "-";
+                    if (select.Month < 10)
+                        dateSelect += "0" + select.Month;
+                    else
+                        dateSelect += select.Month;
+                    dateSelect += "-" + select.Year;
+                    dates.Add(dateSelect);
                 }
             }
             first = new DateTime(second3Start.Value.Year, second3Start.Value.Month, second3Start.Value.Day);
@@ -43,13 +55,23 @@ namespace WorkScheduler
             {
                 if (select.DayOfWeek == DayOfWeek.Tuesday || select.DayOfWeek == DayOfWeek.Friday)
                 {
-                    dates.Add(select);
+                    string dateSelect = "";
+                    if (select.Day < 10)
+                        dateSelect += "0" + select.Day;
+                    else
+                        dateSelect += select.Day;
+                    dateSelect += "-";
+                    if (select.Month < 10)
+                        dateSelect += "0" + select.Month;
+                    else
+                        dateSelect += select.Month;
+                    dateSelect += "-" + select.Year;
+                    dates.Add(dateSelect);
                 }
             }
             for (int i = 0; i < dates.Count; i++)
             {
-                var date = dates[i].Date.ToString();
-                dateList.Items.Add(date);
+                dateList.Items.Add(dates[i]);
             }
         }
 
@@ -68,7 +90,7 @@ namespace WorkScheduler
                     dates.Add(dateList.GetItemText(i));
                 }
             }
-            Team nyt = new Team(teamName.Text, dates);
+            Team nyt = new Team(teamName.Text, dates, 0);
             teams.Add(nyt);
             teamList.Items.Add(teamName.Text);
             dateList.ClearSelected();
@@ -87,7 +109,7 @@ namespace WorkScheduler
                     {
                         for (int k = 0; k < ny.dates.Count; k++)
                         {
-                            if (j.ToString() == ny.dates[k])
+                            if (dateList.Items.Contains(ny.dates[k]))
                             {
                                 dateList.SetSelected(j, true);
                             }
@@ -109,7 +131,49 @@ namespace WorkScheduler
 
         private void createListButton_Click(object sender, EventArgs e)
         {
+            string lastSelect = "";
+            listBox1.Items.Clear();
+            int localTeam = 0;
+            List<string> shiftList = new List<string>();
+            for (int i = 0; i < dates.Count;)
+            {
+                localTeam = rnd.Next(teamList.Items.Count);
+                Team ny = teams[localTeam];
+                if (ny.shift < numberOfShifts.Value && lastSelect != ny.name)
+                {
+                    for (int j = 0; j < ny.dates.Count; j++)
+                    {
+                        if (dates[i].ToString() == ny.dates[j].ToString())
+                        { break; }
+                        else
+                        {
+                            teams[localTeam].shift += 1;
+                            shiftList.Add(ny.name);
+                            lastSelect = ny.name;
+                            i++;
+                            break;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < shiftList.Count; i++)
+            {
+                listBox1.Items.Add(shiftList[i]);
+            }
+        }
 
+        private void loadTeamList_Click(object sender, EventArgs e)
+        {
+            string[] loadTeams = System.IO.File.ReadAllLines(@"C:\users\public\nymappe\teams.txt");
+            for (int i = 0; i < loadTeams.Length; i++)
+            {
+                string[] singleTeam = loadTeams[i].Split(',');
+                string[] teamDates = singleTeam[1].Split('.');
+                List<string> teamDatesList = teamDates.ToList();
+                Team ny = new Team(singleTeam[0], teamDatesList, Convert.ToInt32(singleTeam[2]));
+                teams.Add(ny);
+                teamList.Items.Add(ny.name);
+            }
         }
     }
 }
