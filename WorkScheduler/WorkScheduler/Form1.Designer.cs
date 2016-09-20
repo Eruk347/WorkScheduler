@@ -93,6 +93,7 @@
             this.main13Start.Size = new System.Drawing.Size(136, 20);
             this.main13Start.TabIndex = 5;
             this.main13Start.Value = new System.DateTime(2016, 9, 9, 0, 0, 0, 0);
+            this.main13Start.ValueChanged += new System.EventHandler(this.main13Start_ValueChanged);
             // 
             // label1
             // 
