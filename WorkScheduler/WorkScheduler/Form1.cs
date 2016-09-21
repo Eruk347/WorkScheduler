@@ -12,7 +12,7 @@ namespace WorkScheduler
 {
     public partial class Form1 : Form
     {
-        int prevSelect;
+        int prevSelect, prev2Select;
         List<String> dates = new List<String>();
         List<Team> teams = new List<Team>();
         Random rnd = new Random(DateTime.Now.Millisecond);
@@ -121,29 +121,32 @@ namespace WorkScheduler
 
         private void createListButton_Click(object sender, EventArgs e)
         {
-            string lastSelect = "";
             listBox1.Items.Clear();
             for (int i = 0; i < dates.Count;)
             {
-                int localTeam = rnd.Next(teamList.Items.Count);
-                if (localTeam != prevSelect)
+                rnd = new Random(DateTime.Now.Millisecond + listBox1.Items.Count);
+                int localTeam = rnd.Next(0, teamList.Items.Count);
+                if (localTeam != prevSelect && localTeam != prev2Select)
                 {
+                    prev2Select = prevSelect;
                     prevSelect = localTeam;
                     Team ny = teams[localTeam];
                     if (ny.shift < numberOfShifts.Value)
                     {
+                        bool flag = false;
                         for (int j = 0; j < ny.dates.Count; j++)
                         {
                             if (dates[i].ToString() == ny.dates[j].ToString())
-                            { break; }
-                            else
                             {
-                                teams[localTeam].shift += 1;
-                                listBox1.Items.Add(ny.name);
-                                lastSelect = ny.name;
-                                i++;
+                                flag = true;
                                 break;
                             }
+                        }
+                        if (flag == false)
+                        {
+                            teams[localTeam].shift += 1;
+                            listBox1.Items.Add(dates[i]+" "+ny.name);
+                            i++;
                         }
                     }
                 }
