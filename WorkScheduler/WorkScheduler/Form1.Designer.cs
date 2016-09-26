@@ -46,6 +46,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.loadTeamList = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.priorityTuesday = new System.Windows.Forms.RadioButton();
+            this.priorityFriday = new System.Windows.Forms.RadioButton();
+            this.priorityNormal = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).BeginInit();
             this.SuspendLayout();
             // 
@@ -214,11 +218,56 @@
             this.loadTeamList.UseVisualStyleBackColor = true;
             this.loadTeamList.Click += new System.EventHandler(this.loadTeamList_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(406, 12);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(441, 23);
+            this.progressBar1.TabIndex = 19;
+            // 
+            // priorityTuesday
+            // 
+            this.priorityTuesday.AutoSize = true;
+            this.priorityTuesday.Location = new System.Drawing.Point(472, 236);
+            this.priorityTuesday.Name = "priorityTuesday";
+            this.priorityTuesday.Size = new System.Drawing.Size(103, 17);
+            this.priorityTuesday.TabIndex = 20;
+            this.priorityTuesday.TabStop = true;
+            this.priorityTuesday.Text = "Priority: Tuesday";
+            this.priorityTuesday.UseVisualStyleBackColor = true;
+            // 
+            // priorityFriday
+            // 
+            this.priorityFriday.AutoSize = true;
+            this.priorityFriday.Location = new System.Drawing.Point(472, 260);
+            this.priorityFriday.Name = "priorityFriday";
+            this.priorityFriday.Size = new System.Drawing.Size(90, 17);
+            this.priorityFriday.TabIndex = 21;
+            this.priorityFriday.TabStop = true;
+            this.priorityFriday.Text = "Proirity: Friday";
+            this.priorityFriday.UseVisualStyleBackColor = true;
+            // 
+            // priorityNormal
+            // 
+            this.priorityNormal.AutoSize = true;
+            this.priorityNormal.Checked = true;
+            this.priorityNormal.Location = new System.Drawing.Point(472, 213);
+            this.priorityNormal.Name = "priorityNormal";
+            this.priorityNormal.Size = new System.Drawing.Size(95, 17);
+            this.priorityNormal.TabIndex = 22;
+            this.priorityNormal.TabStop = true;
+            this.priorityNormal.Text = "Priority: Normal";
+            this.priorityNormal.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(958, 561);
+            this.Controls.Add(this.priorityNormal);
+            this.Controls.Add(this.priorityFriday);
+            this.Controls.Add(this.priorityTuesday);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.loadTeamList);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label5);
@@ -265,6 +314,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button loadTeamList;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.RadioButton priorityTuesday;
+        private System.Windows.Forms.RadioButton priorityFriday;
+        private System.Windows.Forms.RadioButton priorityNormal;
     }
 }
 

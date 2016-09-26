@@ -13,13 +13,23 @@ namespace WorkScheduler
     public partial class Form1 : Form
     {
         int prevSelect, prev2Select;
-        List<String> dates = new List<String>();
+        List<DateTime> dates = new List<DateTime>();
         List<Team> teams = new List<Team>();
         Random rnd = new Random(DateTime.Now.Millisecond);
 
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private int teamSum(int max)
+        {
+            int send = 0;
+            for (int i = 1; i < max + 1; i++)
+            {
+                send += i;
+            }
+            return send;
         }
 
         private void springFallGetDate_Click(object sender, EventArgs e)
@@ -34,6 +44,7 @@ namespace WorkScheduler
                 {
                     if (select.DayOfWeek == DayOfWeek.Tuesday || select.DayOfWeek == DayOfWeek.Friday)
                     {
+                        dates.Add(select);/*
                         string dateSelect = "";
                         if (select.Day < 10)
                             dateSelect += "0" + select.Day;
@@ -45,7 +56,7 @@ namespace WorkScheduler
                         else
                             dateSelect += select.Month;
                         dateSelect += "-" + select.Year;
-                        dates.Add(dateSelect);
+                        dates.Add(dateSelect);*/
                     }
                 }
 
@@ -54,6 +65,7 @@ namespace WorkScheduler
             }
             for (int i = 0; i < dates.Count; i++)
             {
+
                 dateList.Items.Add(dates[i]);
             }
         }
@@ -121,36 +133,80 @@ namespace WorkScheduler
 
         private void createListButton_Click(object sender, EventArgs e)
         {
+            if (priorityFriday.Checked == true || priorityTuesday.Checked == true)
+            {
+                List<DateTime> tuesdays = new List<DateTime>();
+                List<DateTime> fridays = new List<DateTime>();
+                for (int i = 0; i < dates.Count; i++)
+                {
+                    if (dates[i].DayOfWeek.ToString() == "Friday")
+                    {
+                        fridays.Add(dates[i]);
+                    }
+                    if (dates[i].DayOfWeek.ToString() == "Tuesday")
+                    {
+                        tuesdays.Add(dates[i]);
+                    }
+                }
+                if (priorityFriday.Checked == true)
+                {
+                    dates.Clear();
+                    dates.AddRange(fridays);
+                    dates.AddRange(tuesdays);
+                }
+                else if (priorityTuesday.Checked == true)
+                {
+                    dates.Clear();
+                    dates.AddRange(tuesdays);
+                    dates.AddRange(fridays);
+                }
+            }
+            progressBar1.Value = 0;
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = dates.Count - 1;
+
+            int[] teamsTried = new int[teams.Count];
             listBox1.Items.Clear();
             for (int i = 0; i < dates.Count;)
             {
+                progressBar1.Value = i;
                 rnd = new Random(DateTime.Now.Millisecond + listBox1.Items.Count);
                 int localTeam = rnd.Next(0, teamList.Items.Count);
-                if (localTeam != prevSelect && localTeam != prev2Select)
+
+                teamsTried[localTeam] = localTeam;
+                if (teamsTried.Sum() == teamSum(teams.Count))
                 {
-                    prev2Select = prevSelect;
-                    prevSelect = localTeam;
-                    Team ny = teams[localTeam];
-                    if (ny.shift < numberOfShifts.Value)
+                    i++;
+                }
+                else
+                {
+                    if (localTeam != prevSelect && localTeam != prev2Select)
                     {
-                        bool flag = false;
-                        for (int j = 0; j < ny.dates.Count; j++)
+                        prev2Select = prevSelect;
+                        prevSelect = localTeam;
+                        Team ny = teams[localTeam];
+                        if (ny.shift < numberOfShifts.Value)
                         {
-                            if (dates[i].ToString() == ny.dates[j].ToString())
+                            bool flag = false;
+                            for (int j = 0; j < ny.dates.Count; j++)
                             {
-                                flag = true;
-                                break;
+                                if (dates[i].ToString() == ny.dates[j].ToString())
+                                {
+                                    flag = true;
+                                    break;
+                                }
                             }
-                        }
-                        if (flag == false)
-                        {
-                            teams[localTeam].shift += 1;
-                            listBox1.Items.Add(dates[i]+" "+ny.name);
-                            i++;
+                            if (flag == false)
+                            {
+                                teams[localTeam].shift += 1;
+                                listBox1.Items.Add(dates[i] + " " + ny.name);
+                                i++;
+                            }
                         }
                     }
                 }
             }
+            //dates.Sort();
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Public\Nymappe\list.txt"))
             {
                 for (int i = 0; i < dates.Count; i++)
