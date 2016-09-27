@@ -44,19 +44,7 @@ namespace WorkScheduler
                 {
                     if (select.DayOfWeek == DayOfWeek.Tuesday || select.DayOfWeek == DayOfWeek.Friday)
                     {
-                        dates.Add(select);/*
-                        string dateSelect = "";
-                        if (select.Day < 10)
-                            dateSelect += "0" + select.Day;
-                        else
-                            dateSelect += select.Day;
-                        dateSelect += "-";
-                        if (select.Month < 10)
-                            dateSelect += "0" + select.Month;
-                        else
-                            dateSelect += select.Month;
-                        dateSelect += "-" + select.Year;
-                        dates.Add(dateSelect);*/
+                        dates.Add(select);
                     }
                 }
 
@@ -68,6 +56,7 @@ namespace WorkScheduler
 
                 dateList.Items.Add(dates[i]);
             }
+            label6.Text = dates.Count.ToString();
         }
 
         private void addTeam_Click(object sender, EventArgs e)
@@ -170,11 +159,12 @@ namespace WorkScheduler
             for (int i = 0; i < dates.Count;)
             {
                 progressBar1.Value = i;
+                progressBar1.Update();
                 rnd = new Random(DateTime.Now.Millisecond + listBox1.Items.Count);
                 int localTeam = rnd.Next(0, teamList.Items.Count);
 
                 teamsTried[localTeam] = localTeam;
-                if (teamsTried.Sum() == teamSum(teams.Count))
+                if (teamsTried.Sum() == teamSum(teams.Count-1))
                 {
                     i++;
                 }
@@ -201,17 +191,21 @@ namespace WorkScheduler
                                 teams[localTeam].shift += 1;
                                 listBox1.Items.Add(dates[i] + " " + ny.name);
                                 i++;
+                                for (int k = 0; k < teamsTried.Length; k++)
+                                {
+                                    teamsTried[k] = 0;
+                                }
                             }
                         }
                     }
                 }
             }
-            //dates.Sort();
+            
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Public\Nymappe\list.txt"))
             {
-                for (int i = 0; i < dates.Count; i++)
+                for (int i = 0; i < listBox1.Items.Count; i++)
                 {
-                    file.WriteLine(dates[i] + "," + listBox1.Items[i]);
+                    file.WriteLine(listBox1.Items[i]);
                 }
             }
         }

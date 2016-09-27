@@ -50,6 +50,7 @@
             this.priorityTuesday = new System.Windows.Forms.RadioButton();
             this.priorityFriday = new System.Windows.Forms.RadioButton();
             this.priorityNormal = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).BeginInit();
             this.SuspendLayout();
             // 
@@ -259,11 +260,21 @@
             this.priorityNormal.Text = "Priority: Normal";
             this.priorityNormal.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 177);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "label6";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(958, 561);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.priorityNormal);
             this.Controls.Add(this.priorityFriday);
             this.Controls.Add(this.priorityTuesday);
@@ -318,6 +329,7 @@
         private System.Windows.Forms.RadioButton priorityTuesday;
         private System.Windows.Forms.RadioButton priorityFriday;
         private System.Windows.Forms.RadioButton priorityNormal;
+        private System.Windows.Forms.Label label6;
     }
 }
 
