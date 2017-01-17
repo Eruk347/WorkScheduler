@@ -44,13 +44,15 @@
             this.createListButton = new System.Windows.Forms.Button();
             this.numberOfShifts = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.finalListBox = new System.Windows.Forms.ListBox();
             this.loadTeamList = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.priorityTuesday = new System.Windows.Forms.RadioButton();
             this.priorityFriday = new System.Windows.Forms.RadioButton();
             this.priorityNormal = new System.Windows.Forms.RadioButton();
             this.label6 = new System.Windows.Forms.Label();
+            this.minTeamsForFullSchedule = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,7 +99,7 @@
             this.main13Start.Name = "main13Start";
             this.main13Start.Size = new System.Drawing.Size(136, 20);
             this.main13Start.TabIndex = 5;
-            this.main13Start.Value = new System.DateTime(2016, 9, 9, 0, 0, 0, 0);
+            this.main13Start.Value = new System.DateTime(2017, 1, 30, 0, 0, 0, 0);
             this.main13Start.ValueChanged += new System.EventHandler(this.main13Start_ValueChanged);
             // 
             // label1
@@ -123,7 +125,7 @@
             this.main13End.Name = "main13End";
             this.main13End.Size = new System.Drawing.Size(136, 20);
             this.main13End.TabIndex = 7;
-            this.main13End.Value = new System.DateTime(2016, 12, 2, 0, 0, 0, 0);
+            this.main13End.Value = new System.DateTime(2017, 5, 8, 0, 0, 0, 0);
             this.main13End.ValueChanged += new System.EventHandler(this.main13End_ValueChanged);
             // 
             // label3
@@ -141,7 +143,7 @@
             this.second3Start.Name = "second3Start";
             this.second3Start.Size = new System.Drawing.Size(136, 20);
             this.second3Start.TabIndex = 9;
-            this.second3Start.Value = new System.DateTime(2017, 1, 2, 0, 0, 0, 0);
+            this.second3Start.Value = new System.DateTime(2017, 6, 1, 0, 0, 0, 0);
             this.second3Start.ValueChanged += new System.EventHandler(this.second3Start_ValueChanged);
             // 
             // label4
@@ -159,7 +161,7 @@
             this.second3End.Name = "second3End";
             this.second3End.Size = new System.Drawing.Size(136, 20);
             this.second3End.TabIndex = 11;
-            this.second3End.Value = new System.DateTime(2017, 1, 20, 0, 0, 0, 0);
+            this.second3End.Value = new System.DateTime(2017, 6, 22, 0, 0, 0, 0);
             // 
             // teamList
             // 
@@ -191,6 +193,7 @@
             0,
             0,
             0});
+            this.numberOfShifts.ValueChanged += new System.EventHandler(this.numberOfShifts_ValueChanged);
             // 
             // label5
             // 
@@ -201,13 +204,13 @@
             this.label5.TabIndex = 16;
             this.label5.Text = "How many shifts/team?";
             // 
-            // listBox1
+            // finalListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(648, 150);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(199, 407);
-            this.listBox1.TabIndex = 17;
+            this.finalListBox.FormattingEnabled = true;
+            this.finalListBox.Location = new System.Drawing.Point(648, 150);
+            this.finalListBox.Name = "finalListBox";
+            this.finalListBox.Size = new System.Drawing.Size(199, 407);
+            this.finalListBox.TabIndex = 17;
             // 
             // loadTeamList
             // 
@@ -218,13 +221,6 @@
             this.loadTeamList.Text = "Load team list";
             this.loadTeamList.UseVisualStyleBackColor = true;
             this.loadTeamList.Click += new System.EventHandler(this.loadTeamList_Click);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(406, 12);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(441, 23);
-            this.progressBar1.TabIndex = 19;
             // 
             // priorityTuesday
             // 
@@ -269,18 +265,47 @@
             this.label6.TabIndex = 23;
             this.label6.Text = "label6";
             // 
+            // minTeamsForFullSchedule
+            // 
+            this.minTeamsForFullSchedule.AutoSize = true;
+            this.minTeamsForFullSchedule.Location = new System.Drawing.Point(530, 301);
+            this.minTeamsForFullSchedule.Name = "minTeamsForFullSchedule";
+            this.minTeamsForFullSchedule.Size = new System.Drawing.Size(10, 13);
+            this.minTeamsForFullSchedule.TabIndex = 24;
+            this.minTeamsForFullSchedule.Text = ".";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(472, 284);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(166, 13);
+            this.label7.TabIndex = 25;
+            this.label7.Text = "Number of teams needed for a full";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(471, 301);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(49, 13);
+            this.label8.TabIndex = 26;
+            this.label8.Text = "semester";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(958, 561);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.minTeamsForFullSchedule);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.priorityNormal);
             this.Controls.Add(this.priorityFriday);
             this.Controls.Add(this.priorityTuesday);
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.loadTeamList);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.finalListBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.numberOfShifts);
             this.Controls.Add(this.createListButton);
@@ -323,13 +348,15 @@
         private System.Windows.Forms.Button createListButton;
         private System.Windows.Forms.NumericUpDown numberOfShifts;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox finalListBox;
         private System.Windows.Forms.Button loadTeamList;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.RadioButton priorityTuesday;
         private System.Windows.Forms.RadioButton priorityFriday;
         private System.Windows.Forms.RadioButton priorityNormal;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label minTeamsForFullSchedule;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }
 
