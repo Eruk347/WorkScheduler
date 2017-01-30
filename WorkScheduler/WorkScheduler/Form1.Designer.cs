@@ -53,6 +53,8 @@
             this.minTeamsForFullSchedule = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.editTeamsButton = new System.Windows.Forms.Button();
+            this.deleteTeam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfShifts)).BeginInit();
             this.SuspendLayout();
             // 
@@ -99,7 +101,7 @@
             this.main13Start.Name = "main13Start";
             this.main13Start.Size = new System.Drawing.Size(136, 20);
             this.main13Start.TabIndex = 5;
-            this.main13Start.Value = new System.DateTime(2017, 1, 30, 0, 0, 0, 0);
+            this.main13Start.Value = new System.DateTime(2016, 8, 29, 0, 0, 0, 0);
             this.main13Start.ValueChanged += new System.EventHandler(this.main13Start_ValueChanged);
             // 
             // label1
@@ -125,7 +127,7 @@
             this.main13End.Name = "main13End";
             this.main13End.Size = new System.Drawing.Size(136, 20);
             this.main13End.TabIndex = 7;
-            this.main13End.Value = new System.DateTime(2017, 5, 8, 0, 0, 0, 0);
+            this.main13End.Value = new System.DateTime(2016, 12, 2, 0, 0, 0, 0);
             this.main13End.ValueChanged += new System.EventHandler(this.main13End_ValueChanged);
             // 
             // label3
@@ -143,7 +145,7 @@
             this.second3Start.Name = "second3Start";
             this.second3Start.Size = new System.Drawing.Size(136, 20);
             this.second3Start.TabIndex = 9;
-            this.second3Start.Value = new System.DateTime(2017, 6, 1, 0, 0, 0, 0);
+            this.second3Start.Value = new System.DateTime(2017, 1, 2, 0, 0, 0, 0);
             this.second3Start.ValueChanged += new System.EventHandler(this.second3Start_ValueChanged);
             // 
             // label4
@@ -161,7 +163,7 @@
             this.second3End.Name = "second3End";
             this.second3End.Size = new System.Drawing.Size(136, 20);
             this.second3End.TabIndex = 11;
-            this.second3End.Value = new System.DateTime(2017, 6, 22, 0, 0, 0, 0);
+            this.second3End.Value = new System.DateTime(2017, 1, 20, 0, 0, 0, 0);
             // 
             // teamList
             // 
@@ -292,11 +294,33 @@
             this.label8.TabIndex = 26;
             this.label8.Text = "semester";
             // 
+            // editTeamsButton
+            // 
+            this.editTeamsButton.Location = new System.Drawing.Point(264, 180);
+            this.editTeamsButton.Name = "editTeamsButton";
+            this.editTeamsButton.Size = new System.Drawing.Size(75, 23);
+            this.editTeamsButton.TabIndex = 27;
+            this.editTeamsButton.Text = "Edit team";
+            this.editTeamsButton.UseVisualStyleBackColor = true;
+            this.editTeamsButton.Click += new System.EventHandler(this.editTeamsButton_Click);
+            // 
+            // deleteTeam
+            // 
+            this.deleteTeam.Location = new System.Drawing.Point(264, 210);
+            this.deleteTeam.Name = "deleteTeam";
+            this.deleteTeam.Size = new System.Drawing.Size(75, 23);
+            this.deleteTeam.TabIndex = 28;
+            this.deleteTeam.Text = "Delete team";
+            this.deleteTeam.UseVisualStyleBackColor = true;
+            this.deleteTeam.Click += new System.EventHandler(this.deleteTeam_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(958, 561);
+            this.Controls.Add(this.deleteTeam);
+            this.Controls.Add(this.editTeamsButton);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.minTeamsForFullSchedule);
@@ -357,6 +381,8 @@
         private System.Windows.Forms.Label minTeamsForFullSchedule;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button editTeamsButton;
+        private System.Windows.Forms.Button deleteTeam;
     }
 }
 

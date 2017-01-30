@@ -12,48 +12,21 @@ namespace WorkScheduler
 {
     public partial class Form1 : Form
     {
-        int prevSelect, prev2Select;
-        List<DateTime> dates = new List<DateTime>();
-        List<DateTime> datesExeption = new List<DateTime>();
-        List<Team> teams = new List<Team>();
-        List<String> finalDates = new List<string>();
-        Random rnd = new Random(DateTime.Now.Millisecond);
+
+        public static List<DateTime> dates = new List<DateTime>();
+        public static List<DateTime> datesExeption = new List<DateTime>();
+        public static List<Team> teams = new List<Team>();
+        public static List<String> finalDates = new List<string>();
+        public static List<string>[] bufferDateList = new List<string>[0];//dates.Count]; //dates.count was used when it was part of the button that created the list
+        public static Random rnd = new Random(DateTime.Now.Millisecond);
+        public static int numberOfShiftsInt;
 
         public Form1()
         {
             InitializeComponent();
+            numberOfShiftsInt = Convert.ToInt32(numberOfShifts.Value);
         }
 
-        private int teamSum(int max)
-        {
-            int send = 0;
-            for (int i = 1; i < max + 1; i++)
-            {
-                send += i;
-            }
-            return send;
-        }
-
-        private int teamSum2(List<string> list)
-        {
-            int send = 0;
-            for (int i = 0; i < list.Count; i++)
-            {
-                string buffer = list[i].ToString().Substring(4);
-                send += Convert.ToInt32(buffer);
-            }
-            return send;
-        }
-
-        private int findTeamName(string name)
-        {
-            for (int i = 0; i < teams.Count; i++)
-            {
-                if (name == teams[i].name)
-                    return i;
-            }
-            return -1;
-        }
 
         private void springFallGetDate_Click(object sender, EventArgs e)
         {
@@ -81,26 +54,32 @@ namespace WorkScheduler
             label6.Text = dates.Count.ToString();
             decimal minTeams = Convert.ToDecimal(label6.Text) / numberOfShifts.Value;
             minTeamsForFullSchedule.Text = "" + Math.Ceiling(minTeams);
+            Array.Resize(ref bufferDateList, dates.Count);
         }
 
         private void addTeam_Click(object sender, EventArgs e)
         {
-            List<String> dates = new List<String>();
-            for (int i = 0; i < dateList.Items.Count; i++)
+            if (teamName.Text.Length < 1)
+            { MessageBox.Show("A team needs a name"); }
+            else
             {
-                if (dateList.GetSelected(i))
+                List<String> dates = new List<String>();
+                for (int i = 0; i < dateList.Items.Count; i++)
                 {
-                    dates.Add(dateList.GetItemText(i));
+                    if (dateList.GetSelected(i))
+                    {
+                        dates.Add(dateList.GetItemText(i));
+                    }
                 }
+                Team nyt = new Team(teamName.Text, dates, 0);
+                teams.Add(nyt);
+                teamList.Items.Add(teamName.Text);
+                dateList.ClearSelected();
+                teamName.Text = "";
             }
-            Team nyt = new Team(teamName.Text, dates, 0);
-            teams.Add(nyt);
-            teamList.Items.Add(teamName.Text);
-            dateList.ClearSelected();
-            teamName.Text = "";
         }
 
-        private void teamList_SelectedIndexChanged(object sender, EventArgs e)
+        private void teamList_SelectedIndexChanged(object sender, EventArgs e)//Highlight dates for the team. 
         {
             dateList.ClearSelected();
             for (int i = 0; i < teams.Count; i++)
@@ -112,7 +91,8 @@ namespace WorkScheduler
                     {
                         for (int k = 0; k < ny.dates.Count; k++)
                         {
-                            if (dateList.Items.Contains(ny.dates[k]))
+                            string buf = dateList.Items[j].ToString();
+                            if (buf.Substring(0, 10) == ny.dates[k])
                             {
                                 dateList.SetSelected(j, true);
                             }
@@ -139,6 +119,7 @@ namespace WorkScheduler
             if (second3Start.Value < main13End.Value)
                 second3Start.Value = main13End.Value;
         }
+
         private void second3Start_ValueChanged(object sender, EventArgs e)
         {
             if (second3End.Value < second3Start.Value)
@@ -147,41 +128,13 @@ namespace WorkScheduler
 
         private void createListButton_Click(object sender, EventArgs e)
         {
-            finalListBox.Items.Clear();//Clear the final list, so there is no old data
-            if (priorityFriday.Checked == true || priorityTuesday.Checked == true)//Check if the priority is different than regular
-            {
-                //Split the list in tuesdays and fridays, so we can priorytise
-                List<DateTime> tuesdays = new List<DateTime>();
-                List<DateTime> fridays = new List<DateTime>();
-                for (int i = 0; i < dates.Count; i++)
-                {
-                    if (dates[i].DayOfWeek.ToString() == "Friday")
-                    {
-                        fridays.Add(dates[i]);
-                    }
-                    if (dates[i].DayOfWeek.ToString() == "Tuesday")
-                    {
-                        tuesdays.Add(dates[i]);
-                    }
-                }
-                if (priorityFriday.Checked == true)//If friday is set for priority, put fridays on the top of the list
-                {
-                    dates.Clear();
-                    dates.AddRange(fridays);
-                    dates.AddRange(tuesdays);
-                }
-                else if (priorityTuesday.Checked == true)//tuesday priority
-                {
-                    dates.Clear();
-                    dates.AddRange(tuesdays);
-                    dates.AddRange(fridays);
-                }
-            }
+            if (priorityFriday.Checked == true)//Check if the priority is different than regular
+                Methods.changePriority("Friday");
+            else if (priorityTuesday.Checked == true)
+                Methods.changePriority("Tuesday");
 
-            int[] teamsTried = new int[teams.Count]; //Two arrays so we can se which teams we have tried
-            int[] teamsTried2 = new int[teams.Count];
+            //Here we check who can take the shifts. So far it is only to get a count on each date
 
-            List<string>[] bufferDateList = new List<string>[dates.Count];
             for (int i = 0; i < dates.Count; i++)
             {
                 bufferDateList[i] = new List<string>();
@@ -199,13 +152,14 @@ namespace WorkScheduler
                     }
                     if (flag == false)
                     {
-                        //string name = ny.name;
-                        bufferDateList[i].Add(ny.name);
+                        string name = ny.name;
+                        bufferDateList[i].Add(name);
                     }
                 }
             }
-            //remove this to check the other code
+            // //remove this to check the other code
 
+            //Here we find the dates that only 1 or 2 teams can take, and get them filled first and put them on an exception list for later. We might do 3 teams, but it's undicided
             for (int i = 0; i < dates.Count; i++)
             {
                 if (bufferDateList[i].Count < 2)
@@ -226,7 +180,7 @@ namespace WorkScheduler
                 {
                     rnd = new Random(DateTime.Now.Millisecond + finalDates.Count);
                     int localTeam = rnd.Next(0, bufferDateList[i].Count);
-                    int modifyingTeam = findTeamName(bufferDateList[i][localTeam].ToString());
+                    int modifyingTeam = Methods.findTeamName(bufferDateList[i][localTeam].ToString());
                     Team ny = teams[modifyingTeam];
                     if (ny.shift < numberOfShifts.Value)
                     {
@@ -238,67 +192,12 @@ namespace WorkScheduler
                 }
             }
             //previous this was part of the for-loop above. Now we need to set it apart, to get the date list filled better
-            for (int i = 0; i < dates.Count;)
+            Methods.createList();
+            if (finalDates.Count < dateList.Items.Count)//we want a complete list. If the list is not totally filled, we try again 3 maybe 5 times (this should be tested)
             {
-                bool flag2 = false;
-                for (int j = 0; j < datesExeption.Count; j++)
-                {
-                    if (datesExeption[j] == dates[i])
-                    {
-                        i++;
-                        flag2 = true;
-                        break;
-                    }
-                }
-                if (flag2 == false)
-                {
-                    rnd = new Random(DateTime.Now.Millisecond + finalDates.Count);
-                    int localTeam = rnd.Next(0, bufferDateList[i].Count);
-                    if (localTeam == 0)
-                    { }
-                    int modifyingTeam = findTeamName(bufferDateList[i][localTeam].ToString());
-                    //localTeam = modifyingTeam;
-                    if (teamsTried2.Sum() == teamSum2(bufferDateList[i]))
-                    {
-                        i++;
-                    }
-                    else if (teamsTried2[localTeam] != localTeam)//Have we tried this team already? If yes, move on. If not, try it
-                    {
-                        teamsTried2[localTeam] = localTeam + 1;
-                        if (modifyingTeam != prevSelect && modifyingTeam != prev2Select)//Has this team been used in the last two shifts?
-                        {
-                            prev2Select = prevSelect;//updating the last two teams, who have been assigned a shift
-                            prevSelect = modifyingTeam;
-
-                            Team ny = teams[modifyingTeam];
-                            if (ny.shift < numberOfShifts.Value)
-                            {
-                                bool flag = false;
-                                for (int l = 0; l < ny.dates.Count; l++)
-                                {
-                                    if (dates[i].ToString() == ny.dates[l].ToString())
-                                    {
-                                        flag = true;
-                                        break;
-                                    }
-                                }
-                                if (flag == false)
-                                {
-                                    teams[modifyingTeam].shift += 1;
-                                    //listBox1.Items.Add(dates[i] + " " + ny.name);
-                                    finalDates.Add("" + dates[i] + " " + ny.name);
-                                    i++;
-                                    for (int k = 0; k < teamsTried.Length; k++)
-                                    {
-                                        teamsTried[k] = 0;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
+                List<string> finalBuffer1 = finalDates;
             }
+
 
             //This is where the two "selection algorithms" split
 
@@ -378,6 +277,21 @@ namespace WorkScheduler
                 numberOfShifts.Value = 1;
             decimal minTeams = Convert.ToDecimal(label6.Text) / numberOfShifts.Value;
             minTeamsForFullSchedule.Text = "" + Math.Ceiling(minTeams);
+            numberOfShiftsInt = Convert.ToInt32(numberOfShifts.Value);
+        }
+
+        private void deleteTeam_Click(object sender, EventArgs e)//deletes a team. NEED a fix for emptying the list
+        {
+            int teamSelected = teamList.SelectedIndex;
+            if (teamSelected == 0)
+                teamList.SetSelected(1, true);
+            else
+                teamList.SetSelected(0, true);
+            string teamtest = teamList.Items[teamSelected].ToString();
+            int test = Methods.findTeamName(teamtest);
+            teams.RemoveAt(test);
+            teamList.Items.RemoveAt(teamSelected);
+
         }
 
         private void loadTeamList_Click(object sender, EventArgs e)
@@ -391,6 +305,21 @@ namespace WorkScheduler
                 teams.Add(ny);
                 teamList.Items.Add(ny.name);
             }
+        }
+
+        private void editTeamsButton_Click(object sender, EventArgs e)
+        {
+            List<String> dates = new List<String>();
+            for (int i = 0; i < dateList.Items.Count; i++)
+            {
+                if (dateList.GetSelected(i))
+                {
+                    dates.Add(dateList.Items[i].ToString().Substring(0, 10));
+                }
+            }
+            string test = teamList.SelectedItem.ToString();
+            int testint = Methods.findTeamName(teamList.SelectedItem.ToString());
+            teams[testint].dates = dates;
         }
     }
 }
