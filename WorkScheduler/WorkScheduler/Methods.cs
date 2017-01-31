@@ -8,7 +8,7 @@ namespace WorkScheduler
 {
     class Methods
     {
-       static Random rnd = new Random(DateTime.Now.Millisecond);
+        static Random rnd = new Random(DateTime.Now.Millisecond);
         public static int prevSelect, prev2Select;
         public static int teamSum2(List<string> list)
         {
@@ -18,7 +18,7 @@ namespace WorkScheduler
                 string buffer = list[i].ToString().Substring(4);
                 send += Convert.ToInt32(buffer);
             }
-            send -= list.Count;
+            //send -= list.Count;
             return send;
         }
         public static int findTeamName(string name)
@@ -33,7 +33,7 @@ namespace WorkScheduler
         public static void changePriority(string priority)//Method for changeing the priority of the list, if necesary
         {
             //finalListBox.Items.Clear();//Clear the final list, so there is no old data
-                                       //Split the list in tuesdays and fridays, so we can priorytise
+            //Split the list in tuesdays and fridays, so we can priorytise
             List<DateTime> tuesdays = new List<DateTime>();
             List<DateTime> fridays = new List<DateTime>();
             for (int i = 0; i < Form1.dates.Count; i++)
@@ -47,7 +47,7 @@ namespace WorkScheduler
                     tuesdays.Add(Form1.dates[i]);
                 }
             }
-            if (priority=="Friday")//If friday is set for priority, put fridays on the top of the list
+            if (priority == "Friday")//If friday is set for priority, put fridays on the top of the list
             {
                 Form1.dates.Clear();
                 Form1.dates.AddRange(fridays);
@@ -60,12 +60,10 @@ namespace WorkScheduler
                 Form1.dates.AddRange(fridays);
             }
         }
-        
+
         public static void createList()
         {
-            Form1.finalDates.Clear();
-            int[] teamsTried = new int[Form1.teams.Count]; //Two arrays so we can se which teams we have tried
-            int[] teamsTried2 = new int[Form1.teams.Count];
+            int[] teamsTried2 = new int[Form1.teams.Count + 1];//an array to se which teams we ahve tried
             for (int i = 0; i < Form1.dates.Count;)
             {
                 bool flag2 = false;
@@ -75,6 +73,10 @@ namespace WorkScheduler
                     {
                         i++;
                         flag2 = true;
+                        for (int k = 0; k < teamsTried2.Length; k++)
+                        {
+                            teamsTried2[k] = 0;
+                        }
                         break;
                     }
                 }
@@ -82,15 +84,19 @@ namespace WorkScheduler
                 {
                     rnd = new Random(DateTime.Now.Millisecond + Form1.finalDates.Count);
                     int localTeam = Form1.rnd.Next(0, Form1.bufferDateList[i].Count);
+
                     int modifyingTeam = findTeamName(Form1.bufferDateList[i][localTeam].ToString());
-                    //localTeam = modifyingTeam;
                     if (teamsTried2.Sum() == Methods.teamSum2(Form1.bufferDateList[i]))
                     {
                         i++;
+                        for (int k = 0; k < teamsTried2.Length; k++)
+                        {
+                            teamsTried2[k] = 0;
+                        }
                     }
-                    else if (teamsTried2[localTeam] != localTeam)//Have we tried this team already? If yes, move on. If not, try it 
+                    else if (teamsTried2[modifyingTeam] != modifyingTeam + 1)//Have we tried this team already? If yes, move on. If not, try it 
                     {
-                        teamsTried2[localTeam] = localTeam;
+                        teamsTried2[modifyingTeam] = modifyingTeam + 1;
                         if (modifyingTeam != prevSelect && modifyingTeam != prev2Select)//Has this team been used in the last two shifts?
                         {
                             prev2Select = prevSelect;//updating the last two teams, who have been assigned a shift
@@ -111,12 +117,10 @@ namespace WorkScheduler
                                 if (flag == false)
                                 {
                                     Form1.teams[modifyingTeam].shift += 1;
-                                    //listBox1.Items.Add(dates[i] + " " + ny.name);
                                     Form1.finalDates.Add("" + Form1.dates[i] + " " + ny.name);
                                     i++;
-                                    for (int k = 0; k < teamsTried.Length; k++)
+                                    for (int k = 0; k < teamsTried2.Length; k++)
                                     {
-                                        teamsTried[k] = 0;
                                         teamsTried2[k] = 0;
                                     }
                                 }

@@ -26,8 +26,7 @@ namespace WorkScheduler
             InitializeComponent();
             numberOfShiftsInt = Convert.ToInt32(numberOfShifts.Value);
         }
-
-
+        
         private void springFallGetDate_Click(object sender, EventArgs e)
         {
             dateList.Items.Clear();
@@ -60,22 +59,35 @@ namespace WorkScheduler
         private void addTeam_Click(object sender, EventArgs e)
         {
             if (teamName.Text.Length < 1)
-            { MessageBox.Show("A team needs a name"); }
+            {
+                MessageBox.Show("A team needs a name");
+            }
             else
             {
-                List<String> dates = new List<String>();
-                for (int i = 0; i < dateList.Items.Count; i++)
+                bool flag = false;
+                for (int i = 0; i < teams.Count; i++)
                 {
-                    if (dateList.GetSelected(i))
-                    {
-                        dates.Add(dateList.GetItemText(i));
-                    }
+                    if (teamName.Text == teamList.Items[i].ToString())
+                        flag = true;
                 }
-                Team nyt = new Team(teamName.Text, dates, 0);
-                teams.Add(nyt);
-                teamList.Items.Add(teamName.Text);
-                dateList.ClearSelected();
-                teamName.Text = "";
+                if (flag == false)
+                {
+                    List<String> dates = new List<String>();
+                    for (int i = 0; i < dateList.Items.Count; i++)
+                    {
+                        if (dateList.GetSelected(i))
+                        {
+                            dates.Add(dateList.GetItemText(i));
+                        }
+                    }
+                    Team nyt = new Team(teamName.Text, dates, 0);
+                    teams.Add(nyt);
+                    teamList.Items.Add(teamName.Text);
+                    dateList.ClearSelected();
+                    teamName.Text = "";
+                }
+                else
+                    MessageBox.Show("Team already exists");
             }
         }
 
@@ -191,61 +203,12 @@ namespace WorkScheduler
                     }
                 }
             }
-            //previous this was part of the for-loop above. Now we need to set it apart, to get the date list filled better
             Methods.createList();
             if (finalDates.Count < dateList.Items.Count)//we want a complete list. If the list is not totally filled, we try again 3 maybe 5 times (this should be tested)
             {
                 List<string> finalBuffer1 = finalDates;
+                MessageBox.Show("Not all dates are filled");
             }
-
-
-            //This is where the two "selection algorithms" split
-
-            /*
-            //This code can create the list, but will not consider if people have 1 shift in the beggining, but cannot take one at the end
-            for (int i = 0; i < dates.Count;)
-            {
-                rnd = new Random(DateTime.Now.Millisecond + finalListBox.Items.Count);
-                int localTeam = rnd.Next(0, teamList.Items.Count);
-                if (teamsTried.Sum() == teamSum(teams.Count - 1))
-                {
-                    i++;
-                }
-                else if (teamsTried[localTeam] != localTeam)//Have we tried this team already? If yes, move on. If not, try it
-                {
-                    teamsTried[localTeam] = localTeam;
-
-                    if (localTeam != prevSelect && localTeam != prev2Select)//Has this team been used in the last two shifts?
-                    {
-                        prev2Select = prevSelect;
-                        prevSelect = localTeam;
-                        Team ny = teams[localTeam];
-                        if (ny.shift < numberOfShifts.Value)
-                        {
-                            bool flag = false;
-                            for (int j = 0; j < ny.dates.Count; j++)
-                            {
-                                if (dates[i].ToString() == ny.dates[j].ToString())
-                                {
-                                    flag = true;
-                                    break;
-                                }
-                            }
-                            if (flag == false)
-                            {
-                                teams[localTeam].shift += 1;
-                                //listBox1.Items.Add(dates[i] + " " + ny.name);
-                                finalDates.Add("" + dates[i] + " " + ny.name);
-                                i++;
-                                for (int k = 0; k < teamsTried.Length; k++)
-                                {
-                                    teamsTried[k] = 0;
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
 
             //This is where the list is sorted and written in the box
             dates.Sort();
@@ -259,6 +222,7 @@ namespace WorkScheduler
                     if (buffer.Substring(0, 10) == buffer2.Substring(0, 10))
                     {
                         finalListBox.Items.Add(buffer);
+                        break;
                     }
                 }
             }
